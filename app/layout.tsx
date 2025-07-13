@@ -28,6 +28,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <div className="fixed bottom-5 right-5 text-white text-center">
+          <span>
+            Developed with love by{" "}
+            <a href="https://t.me/kimkuong" className="underline font-bold">
+              KimKuong
+            </a>
+          </span>
+        </div>
       </body>
     </html>
   );
