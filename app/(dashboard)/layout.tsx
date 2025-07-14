@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
+import SideBar from "@/components/SideBar";
+import NavigationBar from "@/components/NavigationBar";
+import CuteFooter from "@/components/CuteFooter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,15 +30,24 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <div className="fixed bottom-5 right-5 text-white text-center">
+        <div className="bg-[#15263a] min-h-screen">
+          <NavigationBar />
+          <div className="flex justify-start items-start w-full gap-10 px-5 relative">
+            <SideBar />
+            <div className="w-full pl-32 md:pl-80 transition-all duration-300">
+              {children}
+            </div>
+          </div>
+        </div>
+        {/* <div className="fixed bottom-5 right-5 text-white text-center">
           <span>
             Developed with love by{" "}
             <a href="https://t.me/kimkuong" className="underline font-bold">
               KimKuong
             </a>
           </span>
-        </div>
+        </div> */}
+        <CuteFooter />
       </body>
     </html>
   );
