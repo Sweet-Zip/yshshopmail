@@ -4,31 +4,37 @@ import { BiMenu } from "react-icons/bi";
 import { FiBell, FiSearch, FiChevronDown, FiSettings } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { HiSun, HiMoon } from "react-icons/hi";
+import SideBar from "./SideBar";
 
-const NavigationBar = () => {
+interface childProps {
+  children: React.ReactNode;
+}
+const NavigationBar = ({ children }: childProps) => {
   const [isProfileHovered, setIsProfileHovered] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [searchFocused, setSearchFocused] = useState(false);
+  const [isOpenSideBar, setIsOpenSideBar] = useState(false);
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
-    // Add your theme toggle logic here
   };
 
   return (
-    <div className="w-full flex justify-center items-center p-5">
+    <div className="w-full flex flex-col justify-start items-start p-5">
       <motion.nav
-        className="bg-gradient-to-r from-[#1e293b] to-[#0f172a] flex items-center justify-between text-white h-[80px] px-8 rounded-3xl w-full shadow-2xl border border-slate-700/50 backdrop-blur-sm"
+        className={`bg-gradient-to-r from-[#1e293b] to-[#0f172a] flex items-center justify-between text-white h-[80px] px-8 rounded-3xl w-full shadow-2xl border border-slate-700/50 backdrop-blur-sm  transition-all duration-300 `}
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        {/* Left Section */}
         <div className="flex items-center gap-4">
           <motion.button
             className="p-3 rounded-2xl hover:bg-white/10 transition-all duration-300 relative overflow-hidden"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              console.log("Button clicked!"); // Debug log
+              setIsOpenSideBar(!isOpenSideBar);
+            }}
           >
             <motion.div
               className="absolute inset-0 bg-blue-500/20 rounded-2xl"
@@ -116,6 +122,20 @@ const NavigationBar = () => {
           </motion.div>
         </div>
       </motion.nav>
+      <div className="flex w-full relative min-h-screen">
+        <div className="md:sticky md:top-5 md:h-fit mt-5">
+          <SideBar isOpen={isOpenSideBar} setIsOpen={setIsOpenSideBar} />
+        </div>
+
+        <div
+          className={`
+            flex-1 mt-5 transition-all duration-300
+            ${isOpenSideBar ? "md:ml-5" : ""}
+          `}
+        >
+          {children}
+        </div>
+      </div>
     </div>
   );
 };

@@ -26,18 +26,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-[#15263a] ">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#15263a]`}
       >
-        <div className="bg-[#15263a] min-h-screen">
-          <NavigationBar />
-          <div className="flex justify-start items-start w-full gap-10 px-5 relative">
-            <SideBar />
-            <div className="w-full pl-32 md:pl-80 transition-all duration-300">
-              {children}
-            </div>
-          </div>
+        <div className="bg-[#15263a] min-h-screen flex">
+          <NavigationBar children={children} />
         </div>
         {/* <div className="fixed bottom-5 right-5 text-white text-center">
           <span>

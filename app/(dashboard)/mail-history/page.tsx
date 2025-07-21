@@ -143,13 +143,11 @@ const MailHistoryPage = () => {
   const handleCopyOTP = (otp: string) => {
     if (otp !== "loading" && otp !== "expired") {
       navigator.clipboard.writeText(otp);
-      // You can add a toast notification here
     }
   };
 
   const handleCopyIdKey = (idKey: string) => {
     navigator.clipboard.writeText(idKey);
-    // You can add a toast notification here
   };
 
   type MailHistoryItem = {
@@ -177,44 +175,64 @@ const MailHistoryPage = () => {
 
         <AnimatePresence>
           {isOpen && (
-            <motion.div
-              className="absolute right-0 top-full mt-2 w-48 bg-slate-800/95 backdrop-blur-sm border border-slate-600/30 rounded-xl shadow-2xl z-20"
-              initial={{ opacity: 0, y: -10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div className="p-2">
-                <button
-                  onClick={() => handleCopyOTP(item.otp)}
-                  disabled={item.otp === "loading" || item.otp === "expired"}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-slate-700/50 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <FaCopy className="w-4 h-4 text-blue-400" />
-                  <span className="text-sm text-slate-300">Copy OTP</span>
-                </button>
+            <>
+              {/* Backdrop for mobile */}
+              <div
+                className="fixed inset-0 z-10 md:hidden"
+                onClick={() => setOpenMenuId(null)}
+              />
 
-                <button
-                  onClick={() => handleCopyIdKey(item.idKey)}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-slate-700/50 rounded-lg transition-colors duration-200"
-                >
-                  <FaCopy className="w-4 h-4 text-green-400" />
-                  <span className="text-sm text-slate-300">Copy ID Key</span>
-                </button>
+              <motion.div
+                className="absolute right-0 top-full mt-2 w-48 bg-slate-800/95 backdrop-blur-sm border border-slate-600/30 rounded-xl shadow-2xl z-20"
+                initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="p-2">
+                  <button
+                    onClick={() => {
+                      handleCopyOTP(item.otp);
+                      setOpenMenuId(null);
+                    }}
+                    disabled={item.otp === "loading" || item.otp === "expired"}
+                    className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-slate-700/50 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <FaCopy className="w-4 h-4 text-blue-400" />
+                    <span className="text-sm text-slate-300">Copy OTP</span>
+                  </button>
 
-                <button className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-slate-700/50 rounded-lg transition-colors duration-200">
-                  <FaEye className="w-4 h-4 text-purple-400" />
-                  <span className="text-sm text-slate-300">View Details</span>
-                </button>
+                  <button
+                    onClick={() => {
+                      handleCopyIdKey(item.idKey);
+                      setOpenMenuId(null);
+                    }}
+                    className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-slate-700/50 rounded-lg transition-colors duration-200"
+                  >
+                    <FaCopy className="w-4 h-4 text-green-400" />
+                    <span className="text-sm text-slate-300">Copy ID Key</span>
+                  </button>
 
-                <div className="h-px bg-slate-600/30 my-2"></div>
+                  <button
+                    onClick={() => setOpenMenuId(null)}
+                    className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-slate-700/50 rounded-lg transition-colors duration-200"
+                  >
+                    <FaEye className="w-4 h-4 text-purple-400" />
+                    <span className="text-sm text-slate-300">View Details</span>
+                  </button>
 
-                <button className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-slate-700/50 rounded-lg transition-colors duration-200">
-                  <FaTrash className="w-4 h-4 text-red-400" />
-                  <span className="text-sm text-slate-300">Delete</span>
-                </button>
-              </div>
-            </motion.div>
+                  <div className="h-px bg-slate-600/30 my-2"></div>
+
+                  <button
+                    onClick={() => setOpenMenuId(null)}
+                    className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-slate-700/50 rounded-lg transition-colors duration-200"
+                  >
+                    <FaTrash className="w-4 h-4 text-red-400" />
+                    <span className="text-sm text-slate-300">Delete</span>
+                  </button>
+                </div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </div>
@@ -248,7 +266,6 @@ const MailHistoryPage = () => {
     );
   };
 
-  // Mobile Card Component
   const MobileCard = ({
     item,
     index,
@@ -260,7 +277,7 @@ const MailHistoryPage = () => {
 
     return (
       <motion.div
-        className="bg-slate-800/30 rounded-2xl p-4 border border-slate-700/30 hover:bg-slate-800/50 transition-colors duration-200"
+        className="bg-slate-800/30 rounded-xl p-4 border border-slate-700/30 hover:bg-slate-800/50 transition-colors duration-200"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: index * 0.1 }}
@@ -268,9 +285,11 @@ const MailHistoryPage = () => {
         {/* Header Row */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="w-10 h-10 bg-slate-700/50 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-slate-700/50 rounded-full flex items-center justify-center flex-shrink-0">
               <ServiceIcon
-                className={`w-5 h-5 ${getServiceColor(item.service)}`}
+                className={`w-4 h-4 sm:w-5 sm:h-5 ${getServiceColor(
+                  item.service
+                )}`}
               />
             </div>
             <div className="min-w-0 flex-1">
@@ -282,7 +301,7 @@ const MailHistoryPage = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <span
               className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(
                 item.status
@@ -298,16 +317,16 @@ const MailHistoryPage = () => {
         <div className="space-y-2">
           {/* ID Key Row */}
           <div className="flex items-center justify-between">
-            <span className="text-xs text-slate-400">ID Key:</span>
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-slate-300 text-xs">
-                {item.idKey.length > 8
-                  ? `${item.idKey.substring(0, 8)}...`
-                  : item.idKey}
+            <span className="text-xs text-slate-400 flex-shrink-0">
+              ID Key:
+            </span>
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="font-mono text-slate-300 text-xs truncate">
+                {item.idKey}
               </span>
               <button
                 onClick={() => handleCopyIdKey(item.idKey)}
-                className="p-1 hover:bg-slate-700/50 rounded transition-colors duration-200"
+                className="p-1 hover:bg-slate-700/50 rounded transition-colors duration-200 flex-shrink-0"
               >
                 <FaCopy className="w-3 h-3 text-slate-400 hover:text-blue-400" />
               </button>
@@ -316,13 +335,15 @@ const MailHistoryPage = () => {
 
           {/* OTP Row */}
           <div className="flex items-center justify-between">
-            <span className="text-xs text-slate-400">OTP:</span>
+            <span className="text-xs text-slate-400 flex-shrink-0">OTP:</span>
             <OTPDisplay item={item} />
           </div>
 
           {/* Date Row */}
           <div className="flex items-center justify-between">
-            <span className="text-xs text-slate-400">Created:</span>
+            <span className="text-xs text-slate-400 flex-shrink-0">
+              Created:
+            </span>
             <span className="text-xs text-slate-300">
               {new Date(item.createdAt).toLocaleDateString()}
             </span>
@@ -333,9 +354,8 @@ const MailHistoryPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#15263a] py-3 w-full">
-      <div className="w-full mx-auto px-2">
-        {/* Header Section */}
+    <div className="min-h-screen bg-[#15263a] py-3">
+      <div className="px-2 max-w-7xl mx-auto">
         <motion.div
           className="text-center mb-6 sm:mb-8"
           initial={{ opacity: 0, y: -20 }}
@@ -355,7 +375,6 @@ const MailHistoryPage = () => {
           </p>
         </motion.div>
 
-        {/* Filters and Search */}
         <motion.div
           className="bg-gradient-to-r from-[#1e293b] to-[#0f172a] rounded-2xl sm:rounded-3xl p-4 sm:p-6 mb-6 sm:mb-8 shadow-2xl border border-slate-700/50"
           initial={{ opacity: 0, y: 20 }}
@@ -378,9 +397,10 @@ const MailHistoryPage = () => {
             {/* Service Filter */}
             <div className="relative">
               <select
+                aria-label="Filter by service"
                 value={selectedService}
                 onChange={(e) => setSelectedService(e.target.value)}
-                className="appearance-none bg-slate-800/50 border border-slate-600/30 rounded-xl sm:rounded-2xl px-4 py-3 pr-10 text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-transparent transition-all duration-300 text-sm sm:text-base w-full sm:w-auto"
+                className="appearance-none bg-slate-800/50 border border-slate-600/30 rounded-xl sm:rounded-2xl px-4 py-3 pr-10 text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-transparent transition-all duration-300 text-sm sm:text-base w-full sm:w-auto min-w-[140px]"
               >
                 {services.map((service) => (
                   <option key={service.id} value={service.id}>
@@ -400,126 +420,151 @@ const MailHistoryPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          {/* Desktop Table Header - Hidden on Mobile */}
-          <div className="hidden lg:block bg-slate-800/50 px-6 py-4 border-b border-slate-700/50">
-            <div className="grid grid-cols-12 gap-4 text-sm font-semibold text-slate-300 uppercase tracking-wide">
-              <div className="col-span-3">Email</div>
-              <div className="col-span-2">Service</div>
-              <div className="col-span-2">ID Key</div>
-              <div className="col-span-2">OTP</div>
-              <div className="col-span-2">Status</div>
-              <div className="col-span-1">Menu</div>
+          {/* Mobile Cards - Visible on Mobile and Tablet */}
+          <div className="block xl:hidden p-3 sm:p-6">
+            <AnimatePresence>
+              <div className="space-y-3 sm:space-y-4">
+                {currentItems.map((item, index) => (
+                  <MobileCard
+                    key={`mobile-${item.id || index}-${item.email}`}
+                    item={item}
+                    index={index}
+                  />
+                ))}
+              </div>
+            </AnimatePresence>
+          </div>
+
+          {/* Desktop Table - Only on Large Screens */}
+          <div className="hidden xl:block">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[900px]">
+                <thead>
+                  <tr className="bg-slate-800/50 border-b border-slate-700/50">
+                    <th className="text-left px-4 py-4 text-sm font-semibold text-slate-300 uppercase tracking-wide min-w-[200px]">
+                      Email
+                    </th>
+                    <th className="text-left px-4 py-4 text-sm font-semibold text-slate-300 uppercase tracking-wide min-w-[120px]">
+                      Service
+                    </th>
+                    <th className="text-left px-4 py-4 text-sm font-semibold text-slate-300 uppercase tracking-wide min-w-[150px]">
+                      ID Key
+                    </th>
+                    <th className="text-left px-4 py-4 text-sm font-semibold text-slate-300 uppercase tracking-wide min-w-[120px]">
+                      OTP
+                    </th>
+                    <th className="text-left px-4 py-4 text-sm font-semibold text-slate-300 uppercase tracking-wide min-w-[100px]">
+                      Status
+                    </th>
+                    <th className="text-center px-4 py-4 text-sm font-semibold text-slate-300 uppercase tracking-wide min-w-[100px]">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <AnimatePresence>
+                    {currentItems.map((item, index) => {
+                      const ServiceIcon = getServiceIcon(item.service);
+
+                      return (
+                        <motion.tr
+                          key={`desktop-${item.id || index}-${item.email}`}
+                          className="border-b border-slate-700/30 last:border-b-0 hover:bg-slate-800/20 transition-colors duration-200"
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: index * 0.1 }}
+                        >
+                          {/* Email Column */}
+                          <td className="px-4 py-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-slate-700/50 rounded-full flex items-center justify-center flex-shrink-0">
+                                <FaEnvelope className="w-4 h-4 text-slate-400" />
+                              </div>
+                              <div className="min-w-0 max-w-[180px]">
+                                <div className="text-white font-medium truncate">
+                                  {item.email}
+                                </div>
+                                <div className="text-xs text-slate-400">
+                                  {new Date(
+                                    item.createdAt
+                                  ).toLocaleDateString()}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* Service Column */}
+                          <td className="px-4 py-4">
+                            <div className="flex items-center gap-2">
+                              <ServiceIcon
+                                className={`w-5 h-5 ${getServiceColor(
+                                  item.service
+                                )}`}
+                              />
+                              <span className="text-slate-300 capitalize">
+                                {item.service}
+                              </span>
+                            </div>
+                          </td>
+
+                          {/* ID Key Column */}
+                          <td className="px-4 py-4">
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono text-slate-300 text-sm max-w-[120px] truncate">
+                                {item.idKey}
+                              </span>
+                              <button
+                                title="Copy ID Key"
+                                onClick={() => handleCopyIdKey(item.idKey)}
+                                className="p-1 hover:bg-slate-700/50 rounded transition-colors duration-200 flex-shrink-0"
+                              >
+                                <FaCopy className="w-3 h-3 text-slate-400 hover:text-blue-400" />
+                              </button>
+                            </div>
+                          </td>
+
+                          {/* OTP Column */}
+                          <td className="px-4 py-4">
+                            <OTPDisplay item={item} />
+                          </td>
+
+                          {/* Status Column */}
+                          <td className="px-4 py-4">
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
+                                item.status
+                              )} whitespace-nowrap`}
+                            >
+                              {item.status.charAt(0).toUpperCase() +
+                                item.status.slice(1)}
+                            </span>
+                          </td>
+
+                          {/* Actions Column */}
+                          <td className="px-4 py-4 text-center">
+                            <ActionMenu item={item} />
+                          </td>
+                        </motion.tr>
+                      );
+                    })}
+                  </AnimatePresence>
+                </tbody>
+              </table>
             </div>
           </div>
 
-          {/* Content */}
-          <div className="p-3 sm:p-6">
-            <AnimatePresence>
-              {/* Mobile Cards - Visible on Mobile/Tablet */}
-              <div className="block lg:hidden space-y-3">
-                {currentItems.map((item, index) => (
-                  <MobileCard key={item.id} item={item} index={index} />
-                ))}
+          {/* No Results */}
+          {currentItems.length === 0 && (
+            <div className="text-center py-12 px-6">
+              <div className="text-slate-400 text-base sm:text-lg mb-2">
+                No mail history found
               </div>
-
-              {/* Desktop Table - Hidden on Mobile */}
-              <div className="hidden lg:block">
-                {currentItems.map((item, index) => {
-                  const ServiceIcon = getServiceIcon(item.service);
-
-                  return (
-                    <motion.div
-                      key={item.id}
-                      className="grid grid-cols-12 gap-4 items-center py-4 border-b border-slate-700/30 last:border-b-0 hover:bg-slate-800/20 rounded-lg transition-colors duration-200"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: index * 0.1 }}
-                    >
-                      {/* Email */}
-                      <div className="col-span-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-slate-700/50 rounded-full flex items-center justify-center">
-                            <FaEnvelope className="w-4 h-4 text-slate-400" />
-                          </div>
-                          <div>
-                            <div className="text-white font-medium truncate">
-                              {item.email}
-                            </div>
-                            <div className="text-xs text-slate-400">
-                              {new Date(item.createdAt).toLocaleDateString()}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Service */}
-                      <div className="col-span-2">
-                        <div className="flex items-center gap-2">
-                          <ServiceIcon
-                            className={`w-5 h-5 ${getServiceColor(
-                              item.service
-                            )}`}
-                          />
-                          <span className="text-slate-300 capitalize">
-                            {item.service}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* ID Key */}
-                      <div className="col-span-2">
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-slate-300 text-sm truncate">
-                            {item.idKey}
-                          </span>
-                          <button
-                            onClick={() => handleCopyIdKey(item.idKey)}
-                            className="p-1 hover:bg-slate-700/50 rounded transition-colors duration-200"
-                          >
-                            <FaCopy className="w-3 h-3 text-slate-400 hover:text-blue-400" />
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* OTP */}
-                      <div className="col-span-2">
-                        <OTPDisplay item={item} />
-                      </div>
-
-                      {/* Status */}
-                      <div className="col-span-2">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
-                            item.status
-                          )}`}
-                        >
-                          {item.status.charAt(0).toUpperCase() +
-                            item.status.slice(1)}
-                        </span>
-                      </div>
-
-                      {/* Menu */}
-                      <div className="col-span-1">
-                        <ActionMenu item={item} />
-                      </div>
-                    </motion.div>
-                  );
-                })}
+              <div className="text-slate-500 text-sm">
+                Try adjusting your search or filter criteria
               </div>
-            </AnimatePresence>
-
-            {/* No Results */}
-            {currentItems.length === 0 && (
-              <div className="text-center py-12">
-                <div className="text-slate-400 text-base sm:text-lg mb-2">
-                  No mail history found
-                </div>
-                <div className="text-slate-500 text-sm">
-                  Try adjusting your search or filter criteria
-                </div>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Pagination */}
           {totalPages > 1 && (
@@ -541,6 +586,7 @@ const MailHistoryPage = () => {
 
                 <div className="flex items-center gap-2">
                   <button
+                    title="Previous Page"
                     onClick={() =>
                       setCurrentPage((prev) => Math.max(prev - 1, 1))
                     }
@@ -555,6 +601,7 @@ const MailHistoryPage = () => {
                   </span>
 
                   <button
+                    title="Next Page"
                     onClick={() =>
                       setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                     }
